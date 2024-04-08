@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShortUrlController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\ShortUrlRedirectController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -23,5 +25,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::post('/shorten-url', [ShortUrlController::class, 'shortenUrl'])->middleware('auth');
+Route::get('/short/{code}', ShortUrlRedirectController::class)->where('code', '[0-9A-Za-z]{6}');
 
 require __DIR__.'/auth.php';
